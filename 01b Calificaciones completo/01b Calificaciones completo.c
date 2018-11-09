@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <wchar.h>
 #include <locale.h>
-int total_de_alumnos = 1,caracteres_totales = 1,contador_arriba_promedio = 0,contador_abajo_promedio = 0;
-int alumnos_contados = 0,verificacion_menu=0;
+#include <unistd.h>
+int total_de_alumnos = 2,caracteres_totales = 1,contador_arriba_promedio = 0,contador_abajo_promedio = 0;
+int alumnos_contados = 0,verificacion_menu=0,buscador;
 float promedio_total,calificacion_alta = 0,calificacion_baja = 10,calificaciones[1];
 char nombres[1][63];
 //Funciones del programa
@@ -15,7 +16,6 @@ int calificacion_valida(float ver_cal){
 }
 
 void registrar_todos_alumnos(){
-	system("cls");
 	int x,correcto=0;
 	for (x=1;x<=2;x++){
 		while(correcto==0){
@@ -31,6 +31,77 @@ void registrar_todos_alumnos(){
 		}
 	}
 }
+
+void borrar_alumnos(){
+	printf("Borrando a todos los alumnos, porfavor espere");
+	alumnos_contados = 0;
+	sleep(1);
+}
+
+void calificacion_alta_f(){
+	int contador;
+	for (contador=1;contador<=1;contador++){
+		if(calificacion_alta<calificaciones[contador]){
+			calificacion_alta = calificaciones[contador];
+		}
+	}
+}
+
+void calificacion_baja_f(){
+	int contador;
+	for (contador=1;contador<=1;contador++){
+		if(calificacion_baja>calificaciones[contador]){
+			calificacion_baja = calificaciones[contador];
+		}
+	}
+}
+
+void promedio_calificacion(){
+	int contador;
+	float pro_du=0;
+	for(contador=1;contador<=2;contador++){
+		pro_du = pro_du + calificaciones[contador];
+	}
+	promedio_total = pro_du/contador;
+}
+
+void contador_arriba_promedio_f(){
+	int contador;
+	for(contador=1;contador<=10;contador++){
+		if(calificaciones[contador]>promedio_total){
+			contador_arriba_promedio++;
+		}
+	}
+}
+
+void contador_abajo_promedio_f(){
+	int contador;
+	for(contador=1;contador<=10;contador++){
+		if(calificaciones[contador]<promedio_total){
+			contador_arriba_promedio++;
+		}
+	}
+}
+
+void reporte_completo(){
+	calificacion_alta_f();
+	calificacion_baja_f();
+	promedio_calificacion();
+	contador_arriba_promedio_f();
+	contador_abajo_promedio_f();
+	printf("Calificación mas alta es: %f\n",calificacion_alta);
+	printf("Calificación mas baja es: %f \n",calificacion_baja);
+	printf("El promedio es: %f \n",promedio_total);
+	printf("Calificaciones arriba del promedio: %i \n",contador_arriba_promedio);
+	printf("Calificaciones abajo del prmedio: %i \n",contador_abajo_promedio);
+	printf("El resto de calificaciones: \n");
+	int contador;
+	for(contador=1;contador<=2;contador++){
+		printf("El alumno %i tiene como calificación %f \n",contador,calificaciones[contador]);
+	}
+	system("pause");
+}
+
 //funcion principal
 main(){
 	//system("chcp 65001");
@@ -47,14 +118,18 @@ main(){
 			printf("Seleccione alguna opción\n");
 			printf("1.- Ver el reporte completo de las calificaciones\n");
 			printf("2.- Registrar a todos los alumnos\n");
-			printf("3.- Registrar a un solo alumno\n");
-			printf("4.- Modificar a un alumno\n");
-			printf("5.- Borrar a todos los alumnos\n");
-			printf("6.- Salir\n");
+			printf("3.- Borrar a todos los alumnos\n");
+			printf("4.- Salir\n");
 			scanf("%i",&opcion);
+			system("cls");
 			switch(opcion){
 				case 1:
-					
+					if(alumnos_contados!=0){
+						printf("No hay alumnos");
+						system("pause");
+					}else{
+						reporte_completo();
+					}
 				break;
 				case 2:
 					if(alumnos_contados!=0){
@@ -65,12 +140,9 @@ main(){
 					}
 				break;
 				case 3:
+					borrar_alumnos();
 				break;
 				case 4:
-				break;
-				case 5:
-				break;
-				case 6:
 					system("exit");
 				break;
 				default:
@@ -78,5 +150,5 @@ main(){
 				break;
 			}
 		}
-	}while(opcion!=6);
+	}while(opcion!=5);
 }
